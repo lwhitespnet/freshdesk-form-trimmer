@@ -1,52 +1,231 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Form Trimmer</title>
-  <script src="scripts/app.js"></script>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      margin: 8px;
-      font-size: 12px;
-    }
-    .status {
-      padding: 8px;
-      margin: 4px 0;
-      border-radius: 4px;
-      background: #e8f5e8;
-      border-left: 4px solid #4caf50;
-    }
-    .button {
-      background: #2196F3;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      margin: 4px 2px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 11px;
-    }
-    .button:hover {
-      background: #1976D2;
-    }
-  </style>
+    <title>Form Trimmer</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 16px;
+            font-size: 14px;
+            background: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+        .status {
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 6px;
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            font-weight: 500;
+        }
+        .button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 6px 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+        .button:hover {
+            background: #1976D2;
+        }
+        .debug-output {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin: 12px 0;
+            background: #fff;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+        }
+        .log-entry {
+            margin: 4px 0;
+            padding: 6px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            border-left: 3px solid #007bff;
+        }
+        .log-entry.error {
+            background: #fff5f5;
+            border-left-color: #dc3545;
+        }
+        .log-entry.success {
+            background: #f0fff4;
+            border-left-color: #28a745;
+        }
+        .log-data {
+            background: #f1f3f4;
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 3px;
+            font-size: 11px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
-  <div class="status">
-    <strong>🎯 Form Trimmer Active</strong><br>
-    Automatically hiding non-form fields...
-  </div>
-  
-  <button class="button" onclick="onAppActivated()">🔄 Reload</button>
-  <button class="button" onclick="clearDebugOutput()">🗑️ Clear Logs</button>
-  
-  <script>
-    function clearDebugOutput() {
-      const debugDiv = document.getElementById('debug-output');
-      if (debugDiv) {
-        debugDiv.innerHTML = '';
-      }
-    }
-  </script>
+    <div class="container">
+        <div class="status">
+            <strong>🎯 External Form Trimmer</strong><br>
+            Running as external app - testing field hiding functionality
+        </div>
+        
+        <button class="button" onclick="testFieldHiding()">🔄 Test Field Hiding</button>
+        <button class="button" onclick="clearDebugOutput()">🗑️ Clear Logs</button>
+        <button class="button" onclick="simulateFormData()">📋 Simulate Form Data</button>
+        
+        <div id="debug-container">
+            <h4 style="margin: 16px 0 8px 0;">Debug Output:</h4>
+            <div id="debug-output" class="debug-output"></div>
+        </div>
+        
+        <div id="form-simulation" style="margin-top: 20px;">
+            <h4>Simulated Ticket Info:</h4>
+            <div style="background: #f8f9fa; padding: 12px; border-radius: 4px; font-size: 12px;">
+                <strong>Portal Form ID:</strong> <span id="form-id">12345</span><br>
+                <strong>Ticket ID:</strong> <span id="ticket-id">67890</span><br>
+                <strong>Subject:</strong> <span id="ticket-subject">Test ticket from portal form</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced logging function that shows in the UI
+        function debugLog(message, data = null, type = 'info') {
+            console.log(message, data);
+            
+            const debugDiv = document.getElementById('debug-output');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const logText = `${timestamp}: ${message}`;
+            logEntry.innerHTML = `<strong>${logText}</strong>`;
+            
+            if (data) {
+                const dataDiv = document.createElement('div');
+                dataDiv.className = 'log-data';
+                dataDiv.textContent = JSON.stringify(data, null, 2);
+                logEntry.appendChild(dataDiv);
+            }
+            
+            debugDiv.appendChild(logEntry);
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        }
+
+        function clearDebugOutput() {
+            const debugDiv = document.getElementById('debug-output');
+            if (debugDiv) {
+                debugDiv.innerHTML = '';
+            }
+        }
+
+        function simulateFormData() {
+            debugLog('🎲 Simulating form data...', null, 'info');
+            
+            // Simulate form fields that should be kept
+            const formFields = [
+                { name: 'cf_department', key: 'cf_department', label: 'Department' },
+                { name: 'cf_priority_level', key: 'cf_priority_level', label: 'Priority Level' },
+                { name: 'cf_product_type', key: 'cf_product_type', label: 'Product Type' }
+            ];
+            
+            // Simulate all available fields (including ones to hide)
+            const allFields = [
+                'cf_department',
+                'cf_priority_level', 
+                'cf_product_type',
+                'cf_internal_notes',
+                'cf_billing_info',
+                'cf_technician_assigned',
+                'cf_escalation_path',
+                'cf_vendor_info'
+            ];
+            
+            debugLog('📋 Form fields (should keep)', formFields, 'success');
+            debugLog('📝 All available fields', allFields, 'info');
+            
+            // Determine which fields to hide
+            const formFieldNames = new Set(formFields.map(f => f.name));
+            const coreFields = new Set(['subject', 'description', 'status', 'priority', 'group_id', 'responder_id', 'requester_id']);
+            
+            const fieldsToHide = allFields.filter(field => {
+                return !formFieldNames.has(field) && !coreFields.has(field);
+            });
+            
+            debugLog('👁️ Fields that would be hidden', fieldsToHide, 'success');
+            debugLog(`📊 Summary: ${fieldsToHide.length} fields would be hidden, ${formFields.length + 7} core fields would remain visible`, null, 'success');
+        }
+
+        function testFieldHiding() {
+            debugLog('🚀 Testing field hiding functionality...', null, 'info');
+            
+            // Since this is external, we can't actually hide Freshdesk fields
+            // But we can simulate the logic and show what would happen
+            debugLog('⚠️ Note: Running as external app - cannot actually hide Freshdesk fields', null, 'error');
+            debugLog('💡 This would need to be converted back to custom app once S3 issue is resolved', null, 'info');
+            
+            // Simulate the process
+            simulateFormData();
+            
+            debugLog('✅ Field hiding test complete - check logs above for details', null, 'success');
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('🎯 External Form Trimmer loaded successfully', null, 'success');
+            debugLog('📍 Running from: ' + window.location.href, null, 'info');
+            debugLog('🔧 Ready to test field hiding logic', null, 'info');
+            
+            // Auto-run simulation on load
+            setTimeout(simulateFormData, 1000);
+        });
+
+        // Example of how the actual field hiding would work (for reference)
+        function actualFieldHidingLogic() {
+            // This is what would run in a real Freshdesk custom app:
+            /*
+            return client.data.get('ticket')
+                .then(({ ticket }) => {
+                    debugLog('✅ Ticket loaded', {
+                        id: ticket.id,
+                        portal_form_id: ticket.portal_form_id,
+                        subject: ticket.subject
+                    });
+                    
+                    return Promise.all([
+                        ticket.portal_form_id,
+                        fetchFormFields(ticket.portal_form_id),
+                        fetchAllCustomFields()
+                    ]);
+                })
+                .then(([formId, formFields, allFields]) => {
+                    const formFieldNames = new Set(formFields.map(f => f.name));
+                    const coreFields = new Set(['subject', 'description', 'status', 'priority', 'group_id', 'responder_id', 'requester_id']);
+                    
+                    const fieldsToHide = allFields.filter(field => {
+                        return !formFieldNames.has(field) && !coreFields.has(field);
+                    });
+                    
+                    fieldsToHide.forEach(fieldKey => {
+                        client.interface.trigger('hideField', { fieldKey: fieldKey });
+                    });
+                });
+            */
+            debugLog('📚 See actualFieldHidingLogic() function for real implementation', null, 'info');
+        }
+    </script>
 </body>
 </html>
