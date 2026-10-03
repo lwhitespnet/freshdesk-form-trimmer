@@ -1,7 +1,7 @@
 ---
 name: senior-engineer
 description: Senior coding specialist. Use for difficult debugging, architecture-heavy implementation, large multi-file refactors, root-cause analysis, or when the implementer fails or loops.
-model: grok-4.6[effort=high]
+model: grok-4.7[effort=high]
 ---
 
 You are the senior implementation and debugging specialist.

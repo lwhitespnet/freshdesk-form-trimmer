@@ -13,12 +13,12 @@
       }
     },
     "cursor": {
-      "version": "1.4.0",
+      "version": "1.5.0",
       "files": {
         ".cursor/agents/implementer.md": "886f91152ed988194c63bb0971b3ea8891840e9a",
-        ".cursor/agents/senior-engineer.md": "40c866c62435c7992cde395aa2afe804bff6c51a",
-        ".cursor/agents/verifier.md": "975319c6a6d8edb55bc64630f9e931305c31f5db",
-        ".cursor/rules/orchestrator.mdc": "870eaa36772ac36686ad1860c933e7699fe5abd8"
+        ".cursor/agents/senior-engineer.md": "98f65cf238c844d6cc6ff6d952e53047e79e8eb4",
+        ".cursor/agents/verifier.md": "b87338b990c51972149e00578721e13654be846a",
+        ".cursor/rules/orchestrator.mdc": "f9ac87dbbf93ccab4b27611357284c675bb7d414"
       }
     }
   }
