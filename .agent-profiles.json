@@ -1,19 +1,19 @@
 {
   "profiles": {
     "claude-code": {
-      "version": "2.2.0",
+      "version": "2.3.0",
       "files": {
-        ".claude/rules/00-working-with-me.md": "462903bbbb956e195ce6d3d4b2ab388cbb23283a"
+        ".claude/rules/00-working-with-me.md": "37239084eab67cc48fc1197798c04eedaeacda3b"
       }
     },
     "chatgpt": {
-      "version": "2.2.0",
+      "version": "2.3.0",
       "files": {
-        "AGENTS.md": "623bc9bedf0cec56c6c450d8affe547f7a3f5a7f"
+        "AGENTS.md": "b51dd44612941cc86759cae2358e90cc5251c6dd"
       }
     },
     "cursor": {
-      "version": "2.2.0",
+      "version": "2.3.0",
       "files": {
         ".cursor/agents/implementer.md": "40eab652b6006b7107b44c59a2492f67dd7e694c",
         ".cursor/agents/senior-engineer.md": "9891f19d1530565a1cd23115abe69f309b071b7d",
